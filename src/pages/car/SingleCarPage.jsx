@@ -85,7 +85,7 @@ export default function SingleCarPage() {
     <Layout>
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-16">
         {/* ================= IMAGES ================= */}
-        <div className="sticky top-24">
+        <div className="top-24">
           <div className=" flex items-center justify-center overflow-hidden">
             <img
               src={car.gallery[activeImage]}

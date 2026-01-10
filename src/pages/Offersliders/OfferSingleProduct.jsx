@@ -128,7 +128,7 @@ function OfferSingleProduct() {
                   <img
                     src={m.url}
                     alt={product.name}
-                    className="w-full max-w-[420px] object-cover"
+                    className="w-full max-w-[320px] object-cover"
                   />
                 ) : (
                   <video src={m.url} controls className="w-full max-w-[420px]" />

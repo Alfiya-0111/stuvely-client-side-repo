@@ -166,11 +166,11 @@ export default function SingleCollectionProduct() {
       {/* PRODUCT */}
       <div className="max-w-6xl mx-auto p-6 grid lg:grid-cols-2 gap-12">
         {/* IMAGES – ZARA STYLE */}
-        <div className="bg-gray-50 rounded-2xl p-6">
+        <div className="p-6">
           <img
             src={images[activeImage]}
             alt={product.name}
-            className="w-full h-[520px] object-contain transition-transform duration-300 hover:scale-105"
+            className="w-auto h-[320px]  transition-transform duration-300 hover:scale-105"
           />
 
           {images.length > 1 && (
