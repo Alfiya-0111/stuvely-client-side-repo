@@ -25,6 +25,7 @@
     "react-router-dom": "^7.9.3",
     "react-toastify": "^11.0.5",
     "react-uploader": "^3.43.0",
+    "sitemap": "^9.0.0",
     "swiper": "^12.0.2",
     "tailwindcss": "^4.1.13"
   },
