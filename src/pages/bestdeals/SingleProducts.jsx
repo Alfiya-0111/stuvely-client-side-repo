@@ -5,6 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 const BESTDEALS_DB_URL =
   "https://stuvely-data-default-rtdb.firebaseio.com/bestdeals";
@@ -21,7 +22,6 @@ export default function SingleProducts() {
   const auth = getAuth();
   const db = getDatabase();
 
-  /* ================= IMAGE NORMALIZER ================= */
   const getImageUrl = (img) => {
     if (!img) return "";
     if (typeof img === "string") return img;
@@ -33,11 +33,8 @@ export default function SingleProducts() {
   useEffect(() => {
     const user = auth.currentUser;
     if (!user) return;
-
     const wRef = ref(db, `wishlist/${user.uid}`);
-    onValue(wRef, (snap) => {
-      setWishlist(snap.val() || {});
-    });
+    onValue(wRef, (snap) => setWishlist(snap.val() || {}));
   }, [auth, db]);
 
   /* ================= FETCH PRODUCT ================= */
@@ -69,9 +66,7 @@ export default function SingleProducts() {
         if (!prodObj) return;
 
         const finalPrice = prodObj.offer
-          ? Math.round(
-              prodObj.price - (prodObj.price * prodObj.offer) / 100
-            )
+          ? Math.round(prodObj.price - (prodObj.price * prodObj.offer) / 100)
           : prodObj.price;
 
         const normalizedGallery = (prodObj.gallery || []).map((g) =>
@@ -95,29 +90,19 @@ export default function SingleProducts() {
     fetchProduct();
   }, [offerId, productId, sliderSlug]);
 
-  /* ================= DISPLAY IMAGE ================= */
   const displayedImage =
     getImageUrl(activeVariant?.image) ||
     product?.gallery?.[activeGalleryIndex] ||
     product?.imageUrl ||
     "/placeholder-product.jpg";
 
-  /* ================= WISHLIST ADD ONLY ================= */
   const toggleWishlist = async () => {
     const user = auth.currentUser;
-    if (!user) {
-      toast.error("Please login first");
-      return;
-    }
-
-    // already added
-    if (wishlist[productId]) {
-      toast("Already in wishlist 🤍", { icon: "⚠️" });
-      return;
-    }
+    if (!user) return toast.error("Please login first");
+    if (wishlist[productId])
+      return toast("Already in wishlist 🤍", { icon: "⚠️" });
 
     const wRef = ref(db, `wishlist/${user.uid}/${productId}`);
-
     await set(wRef, {
       id: productId,
       name: product.name,
@@ -127,22 +112,13 @@ export default function SingleProducts() {
       offer: product.offer || null,
     });
 
-    // 🔥 instant heart black
-    setWishlist((prev) => ({
-      ...prev,
-      [productId]: true,
-    }));
-
+    setWishlist((prev) => ({ ...prev, [productId]: true }));
     toast.success("Added to wishlist ❤️");
   };
 
-  /* ================= ADD TO CART ================= */
   const addToCart = async () => {
     const user = auth.currentUser;
-    if (!user) {
-      toast.error("Please login first");
-      return;
-    }
+    if (!user) return toast.error("Please login first");
 
     const cartItem = {
       productId,
@@ -167,7 +143,6 @@ export default function SingleProducts() {
     toast.success("Added to cart 🖤");
   };
 
-  /* ================= LOADING ================= */
   if (!product) {
     return (
       <Layout>
@@ -178,9 +153,34 @@ export default function SingleProducts() {
     );
   }
 
-  /* ================= UI ================= */
   return (
     <Layout>
+      {/* ---------------- SEO ---------------- */}
+      <Helmet>
+        <title>{product.name} | Stuvely</title>
+        <meta
+          name="description"
+          content={
+            product.shortDescription ||
+            `Buy ${product.name} online at best price. ${
+              product.offer
+                ? `Discounted ₹${product.finalPrice} from ₹${product.price}`
+                : ""
+            }`
+          }
+        />
+        <meta
+          name="keywords"
+          content={`Stuvely, ${product.name}, ${product.category || "best deals"}, online shopping, buy online, discount`}
+        />
+        <link
+          rel="canonical"
+          href={`https://stuvely.com/bestdeals/${
+            sliderSlug || offerId
+          }/product/${productId}`}
+        />
+      </Helmet>
+
       <Toaster position="top-center" />
 
       <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -192,15 +192,9 @@ export default function SingleProducts() {
               alt={product.name}
               className="w-auto h-[320px] transition-transform duration-500 hover:scale-105"
             />
-
-            {/* ❤️ WISHLIST */}
             <button
               onClick={toggleWishlist}
-              className="absolute top-4 right-4 z-20
-                   backdrop-blur
-                  p-2 rounded-full
-                  transition-transform
-                  hover:scale-110"
+              className="absolute top-4 right-4 z-20 backdrop-blur p-2 rounded-full transition-transform hover:scale-110"
             >
               {wishlist[productId] ? (
                 <AiFillHeart size={22} className="text-black" />
@@ -210,7 +204,6 @@ export default function SingleProducts() {
             </button>
           </div>
 
-          {/* GALLERY */}
           {product.gallery?.length > 0 && (
             <div className="flex gap-3 mt-4 overflow-x-auto">
               {product.gallery.map((img, i) =>
@@ -249,7 +242,6 @@ export default function SingleProducts() {
             )}
           </div>
 
-          {/* VARIANTS */}
           {product.variants?.length > 0 && (
             <div className="mb-6">
               <p className="text-sm font-medium mb-2">Select option</p>
@@ -271,7 +263,6 @@ export default function SingleProducts() {
             </div>
           )}
 
-          {/* CTA */}
           <button
             onClick={addToCart}
             className="w-35 bg-white text-black py-2 uppercase tracking-wide border-2 transition"

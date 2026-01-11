@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../../component/Layout";
 import { getAuth } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 
 const KEYCHAINS_DB_URL =
   "https://stuvely-data-default-rtdb.firebaseio.com/keychains";
@@ -84,6 +85,23 @@ export default function KeychainsProductInfo() {
   /* ================= UI ================= */
   return (
     <Layout>
+      {/* ===== SEO ===== */}
+      <Helmet>
+        <title>{product.name} | Stuvely</title>
+        <meta
+          name="description"
+          content={product.description || `Buy ${product.name} online at best price. Keychains available at Stuvely.`}
+        />
+        <meta
+          name="keywords"
+          content={`${product.name}, keychains, buy keychains online, Stuvely keychains, gift keychains`}
+        />
+        <link
+          rel="canonical"
+          href={`https://stuvely.com/keychains/${carId}`}
+        />
+      </Helmet>
+
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-16">
         {/* ================= IMAGES ================= */}
         <div className="sticky top-24">
@@ -91,7 +109,7 @@ export default function KeychainsProductInfo() {
             <img
               src={product.gallery[activeImage]}
               alt={product.name}
-              className="w-auto h-[320px]  transition-transform duration-500 hover:scale-105"
+              className="w-auto h-[320px] transition-transform duration-500 hover:scale-105"
             />
           </div>
 
@@ -102,7 +120,7 @@ export default function KeychainsProductInfo() {
                 key={i}
                 src={img}
                 onClick={() => setActiveImage(i)}
-                className={`w-20 h-20   cursor-pointer border transition ${
+                className={`w-20 h-20 cursor-pointer border transition ${
                   activeImage === i
                     ? "border-black"
                     : "border-transparent hover:border-gray-400"
@@ -139,33 +157,6 @@ export default function KeychainsProductInfo() {
           >
             {adding ? "Adding..." : "Add to Cart"}
           </button>
-
-          {/* EXTERNAL STORES */}
-          <div className="flex flex-wrap gap-3 text-sm">
-            {[
-              "flipkart",
-              "amazon",
-              "myntra",
-              "ajio",
-              "meesho",
-              "tatacliq",
-              "snapdeal",
-              "nykaa",
-            ].map(
-              (store) =>
-                product[store] && (
-                  <a
-                    key={store}
-                    href={product[store]}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border px-4 py-2 rounded-full hover:bg-black hover:text-white transition"
-                  >
-                    Buy on {store}
-                  </a>
-                )
-            )}
-          </div>
 
           {/* HIGHLIGHTS */}
           {product.highlights.length > 0 && (

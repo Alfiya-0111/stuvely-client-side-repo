@@ -1,11 +1,11 @@
 // src/pages/SingleCollection.jsx
-
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "../../component/Layout";
 import { db, auth } from "../../firebaseConfig";
 import { ref, onValue, set, remove } from "firebase/database";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { Helmet } from "react-helmet-async";
 
 function SingleCollection() {
   const { slug } = useParams();
@@ -91,6 +91,26 @@ function SingleCollection() {
 
   return (
     <Layout>
+      {/* ================= Dynamic SEO ================= */}
+      <Helmet>
+        <title>{collection.name} | Shop Collection at Stuvely</title>
+        <meta
+          name="description"
+          content={
+            collection.description ||
+            `Explore the ${collection.name} collection at Stuvely. Premium quality products with best prices and fast delivery.`
+          }
+        />
+        <meta
+          name="keywords"
+          content={`${collection.name}, ${collection.category || "Collection"}, Stuvely collection`}
+        />
+        <link
+          rel="canonical"
+          href={`https://stuvely.com/collections/${collection.slug}`}
+        />
+      </Helmet>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         {/* ================= Heading ================= */}

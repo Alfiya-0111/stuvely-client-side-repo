@@ -1,6 +1,6 @@
-// src/pages/OfferSingleProduct.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async"; // ✅ Add Helmet
 import Layout from "../../component/Layout";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, set, remove, onValue } from "firebase/database";
@@ -115,111 +115,134 @@ function OfferSingleProduct() {
   if (!product) return null;
 
   return (
-    <Layout>
-      <div className="max-w-5xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <>
+      {/* ================= SEO ================= */}
+      <Helmet>
+        <title>{product.name} | Stuvely</title>
+        <meta
+          name="description"
+          content={
+            product.description
+              ? product.description
+              : `Buy ${product.name} online at Stuvely. Best price, premium quality, and exciting offers.`
+          }
+        />
+        <meta
+          name="keywords"
+          content={`${product.name}, ${offer?.title} offer, ${product.offer || 0}% off, Stuvely deals`}
+        />
+        <link
+          rel="canonical"
+          href={`https://stuvely.com/offers/${sliderSlug}/${productId}`}
+        />
+      </Helmet>
 
-          {/* MEDIA */}
-          <div>
-            <div className="relative">
-              {(() => {
-                const m = displayedMedia();
-                return m.type === "image" ? (
-                  <img
-                    src={m.url}
-                    alt={product.name}
-                    className="w-full max-w-[320px] object-cover"
-                  />
-                ) : (
-                  <video src={m.url} controls className="w-full max-w-[420px]" />
-                );
-              })()}
+      <Layout>
+        <div className="max-w-5xl mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+            {/* MEDIA */}
+            <div>
+              <div className="relative">
+                {(() => {
+                  const m = displayedMedia();
+                  return m.type === "image" ? (
+                    <img
+                      src={m.url}
+                      alt={product.name}
+                      className="w-full max-w-[320px] object-cover"
+                    />
+                  ) : (
+                    <video src={m.url} controls className="w-full max-w-[420px]" />
+                  );
+                })()}
+
+                <button
+                  onClick={toggleWishlist}
+                  className="absolute top-4 right-4 bg-white p-2 rounded-full"
+                >
+                  {wishlist[product.id] ? (
+                    <AiFillHeart size={20} className="text-red-500" />
+                  ) : (
+                    <AiOutlineHeart size={20} />
+                  )}
+                </button>
+              </div>
+
+              <div className="flex gap-2 mt-4 overflow-x-auto">
+                {product.gallery?.map((g, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setActiveGalleryIndex(i)}
+                    className="cursor-pointer"
+                  >
+                    <img
+                      src={g.url}
+                      alt=""
+                      className="w-16 h-16 object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* INFO */}
+            <div>
+              <h1 className="text-lg uppercase tracking-[0.25em] font-normal mb-4">
+                {product.name}
+              </h1>
+
+              <p className="text-sm text-gray-600 leading-relaxed max-w-md">
+                {product.description}
+              </p>
+
+              <div className="mt-6">
+                <p className="text-base tracking-wide">
+                  ₹{product.price}
+                </p>
+                {product.offer && (
+                  <p className="text-xs text-gray-500 tracking-widest mt-1">
+                    {product.offer}% OFF
+                  </p>
+                )}
+              </div>
+
+              {product.variants?.length > 0 && (
+                <div className="mt-8">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
+                    Select Variant
+                  </p>
+
+                  <div className="flex gap-2 flex-wrap">
+                    {product.variants.map((v, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveVariant(v)}
+                        className={`px-4 py-1.5 text-xs tracking-widest border
+                          ${
+                            activeVariant === v
+                              ? "bg-black text-white border-black"
+                              : "border-gray-300 hover:border-black"
+                          }`}
+                      >
+                        {v.color || v.size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <button
-                onClick={toggleWishlist}
-                className="absolute top-4 right-4 bg-white p-2 rounded-full"
+                onClick={addToCart}
+                className="mt-10 px-12 py-3 text-xs uppercase tracking-[0.3em] bg-black text-white hover:bg-gray-900 transition"
               >
-                {wishlist[product.id] ? (
-                  <AiFillHeart size={20} className="text-red-500" />
-                ) : (
-                  <AiOutlineHeart size={20} />
-                )}
+                Add to Cart
               </button>
             </div>
-
-            <div className="flex gap-2 mt-4 overflow-x-auto">
-              {product.gallery?.map((g, i) => (
-                <div
-                  key={i}
-                  onClick={() => setActiveGalleryIndex(i)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={g.url}
-                    alt=""
-                    className="w-16 h-16 object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* INFO */}
-          <div>
-            <h1 className="text-lg uppercase tracking-[0.25em] font-normal mb-4">
-              {product.name}
-            </h1>
-
-            <p className="text-sm text-gray-600 leading-relaxed max-w-md">
-              {product.description}
-            </p>
-
-            <div className="mt-6">
-              <p className="text-base tracking-wide">
-                ₹{product.price}
-              </p>
-              {product.offer && (
-                <p className="text-xs text-gray-500 tracking-widest mt-1">
-                  {product.offer}% OFF
-                </p>
-              )}
-            </div>
-
-            {product.variants?.length > 0 && (
-              <div className="mt-8">
-                <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">
-                  Select Variant
-                </p>
-
-                <div className="flex gap-2 flex-wrap">
-                  {product.variants.map((v, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setActiveVariant(v)}
-                      className={`px-4 py-1.5 text-xs tracking-widest border
-                        ${
-                          activeVariant === v
-                            ? "bg-black text-white border-black"
-                            : "border-gray-300 hover:border-black"
-                        }`}
-                    >
-                      {v.color || v.size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={addToCart}
-              className="mt-10 px-12 py-3 text-xs uppercase tracking-[0.3em] bg-black text-white hover:bg-gray-900 transition"
-            >
-              Add to Cart
-            </button>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
 }
 

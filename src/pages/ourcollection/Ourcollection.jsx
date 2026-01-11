@@ -1,13 +1,17 @@
+// src/pages/OurCollection.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Autoplay } from "swiper/modules";
+import { Helmet } from "react-helmet-async";
+
 import "swiper/css";
 import "swiper/css/grid";
 
 function OurCollection() {
   const [collections, setCollections] = useState([]);
   const navigate = useNavigate();
+  const { collectionSlug } = useParams(); // optional, if you want single collection SEO
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -29,6 +33,9 @@ function OurCollection() {
                 item.slug ||
                 item.name?.toLowerCase().replace(/\s+/g, "-") ||
                 `collection-${key}`,
+              description:
+                item.description ||
+                `Explore the ${item.name} collection at Stuvely. Premium products with best prices and fast delivery.`,
             };
           });
           setCollections(arr);
@@ -43,8 +50,47 @@ function OurCollection() {
 
   if (!collections.length) return null;
 
+  // Optional: dynamic SEO for single collection if slug is present
+  const currentCollection = collections.find(
+    (col) => col.slug === collectionSlug
+  );
+
   return (
     <section className="relative py-20 bg-white overflow-hidden">
+      {/* Dynamic SEO */}
+      <Helmet>
+        <title>
+          {currentCollection
+            ? currentCollection.name
+            : "Our Collections"}{" "}
+          | Shop at Stuvely
+        </title>
+        <meta
+          name="description"
+          content={
+            currentCollection
+              ? currentCollection.description
+              : "Explore our curated collections at Stuvely. Premium quality products, best prices, and fast delivery."
+          }
+        />
+        <meta
+          name="keywords"
+          content={
+            currentCollection
+              ? `${currentCollection.name}, ${currentCollection.category}, Stuvely collections`
+              : "collections, Stuvely, shop online, premium products"
+          }
+        />
+        <link
+          rel="canonical"
+          href={
+            currentCollection
+              ? `https://stuvely.com/collections/${currentCollection.slug}`
+              : "https://stuvely.com/collections"
+          }
+        />
+      </Helmet>
+
       {/* Subtle editorial background */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-neutral-50 to-white"></div>
 
@@ -79,9 +125,11 @@ function OurCollection() {
                 className="group cursor-pointer flex flex-col items-center text-center"
               >
                 {/* Image */}
-                <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden
+                <div
+                  className="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden
                   border border-neutral-200 transition-all duration-300
-                  group-hover:scale-105">
+                  group-hover:scale-105"
+                >
                   <img
                     src={col.imageUrl}
                     alt={col.name}

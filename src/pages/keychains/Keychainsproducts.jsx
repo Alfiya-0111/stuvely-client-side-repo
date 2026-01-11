@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ref, onValue, set } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { db, auth } from "../../firebaseConfig";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { Helmet } from "react-helmet-async";
 
 export default function Keychainsproducts() {
   const [keychains, setKeychains] = useState([]);
@@ -46,6 +47,20 @@ export default function Keychainsproducts() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
+      {/* ========== SEO ========== */}
+      <Helmet>
+        <title>Top Keychains | Stuvely</title>
+        <meta
+          name="description"
+          content="Explore the latest keychains collection at Stuvely. Unique, trendy, and affordable keychains to add style to your everyday life."
+        />
+        <meta
+          name="keywords"
+          content="keychains, buy keychains online, Stuvely keychains, trendy keychains, gift keychains"
+        />
+        <link rel="canonical" href={`https://stuvely.com/keychains`} />
+      </Helmet>
+
       {/* HEADING */}
       <h2 className="heading-zara text-hm-xl text-black mb-8">
         Top Deals
@@ -59,23 +74,12 @@ export default function Keychainsproducts() {
           return (
             <div
               key={item.id}
-              className="
-                flex-none
-                w-48
-                bg-white
-                relative
-                rounded-xl
-                card-luxury
-              "
+              className="flex-none w-48 bg-white relative rounded-xl card-luxury"
             >
               {/* Wishlist */}
               <button
                 onClick={() => toggleWishlist(item)}
-                className=" absolute top-4 right-4 z-20
-                   backdrop-blur
-                  p-2 rounded-full
-                  transition-transform
-                  hover:scale-110"
+                className="absolute top-4 right-4 z-20 backdrop-blur p-2 rounded-full transition-transform hover:scale-110"
               >
                 {isWishlisted ? (
                   <AiFillHeart className="text-black text-lg" />

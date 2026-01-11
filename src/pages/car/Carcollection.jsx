@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { db, auth } from "../../firebaseConfig";
 import { ref, set, remove, onValue } from "firebase/database";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { Helmet } from "react-helmet-async";
 
 export default function Carcollection() {
   const [cars, setCars] = useState([]);
@@ -43,6 +44,20 @@ export default function Carcollection() {
 
   return (
     <section className="bg-white py-20">
+      {/* ---------------- SEO ---------------- */}
+      <Helmet>
+        <title>New Car Arrivals | Stuvely</title>
+        <meta
+          name="description"
+          content="Explore the latest car arrivals at Stuvely. Premium collection of cars with best prices and offers. Check out our new arrivals now!"
+        />
+        <meta
+          name="keywords"
+          content="cars, new arrivals, Stuvely cars, buy cars online, premium cars, car collection"
+        />
+        <link rel="canonical" href={`https://stuvely.com/cars`} />
+      </Helmet>
+
       <div className="max-w-7xl mx-auto px-6">
         {/* ================= HEADING ================= */}
         <div className="mb-14 text-center md:text-left">
@@ -55,23 +70,14 @@ export default function Carcollection() {
         {/* ================= GRID ================= */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
           {cars.map((car) => (
-            <div
-              key={car.id}
-              className="group relative cursor-pointer"
-            >
+            <div key={car.id} className="group relative cursor-pointer">
               {/* Wishlist */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleWishlist(car);
                 }}
-                className="
-                  absolute top-4 right-4 z-20
-                   backdrop-blur
-                  p-2 rounded-full
-                  transition-transform
-                  hover:scale-110
-                "
+                className="absolute top-4 right-4 z-20 backdrop-blur p-2 rounded-full transition-transform hover:scale-110"
               >
                 {wishlist[car.id] ? (
                   <AiFillHeart className="text-black text-lg" />
@@ -86,12 +92,7 @@ export default function Carcollection() {
                   <img
                     src={car.image}
                     alt={car.name}
-                    className="
-                      w-56
-                      transition-all duration-500 ease-out
-                      group-hover:-translate-y-8
-                      group-hover:scale-105
-                    "
+                    className="w-56 transition-all duration-500 ease-out group-hover:-translate-y-8 group-hover:scale-105"
                   />
                 </div>
 
@@ -100,9 +101,7 @@ export default function Carcollection() {
                   <h3 className="uppercase tracking-[0.25em] text-sm text-black">
                     {car.name}
                   </h3>
-                  <p className="mt-2 text-sm text-neutral-600">
-                    ₹{car.price}
-                  </p>
+                  <p className="mt-2 text-sm text-neutral-600">₹{car.price}</p>
                 </div>
               </Link>
             </div>

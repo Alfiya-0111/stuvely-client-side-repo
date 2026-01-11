@@ -4,6 +4,7 @@ import Layout from "../../component/Layout";
 import { auth, db } from "../../firebaseConfig";
 import { ref, onValue, set, remove, get } from "firebase/database";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { Helmet } from "react-helmet-async";
 
 /* ---------------- PRICE HELPER ---------------- */
 const priceAfterOffer = (p) => {
@@ -17,7 +18,7 @@ const priceAfterOffer = (p) => {
   return base;
 };
 
-/* ---------------- IMAGE NORMALIZER (FIXED) ---------------- */
+/* ---------------- IMAGE NORMALIZER ---------------- */
 const normalizeProduct = (data = {}) => {
   const gallery =
     Array.isArray(data.gallery) && data.gallery.length
@@ -31,10 +32,9 @@ const normalizeProduct = (data = {}) => {
       : [];
 
   return {
-    ...data, // ✅ FIRST spread
+    ...data,
     gallery: gallery.filter(Boolean),
     image: gallery[0] || "",
-
     highlights: Array.isArray(data.highlights) ? data.highlights : [],
     specs: data.specs || {},
     shortDescription: data.shortDescription || "",
@@ -52,7 +52,6 @@ const getImages = (item) =>
     ? [item.image]
     : ["/placeholder-product.jpg"];
 
-/* ---------------- MAIN COMPONENT ---------------- */
 export default function SingleCollectionProduct() {
   const { slug, productId } = useParams();
   const navigate = useNavigate();
@@ -163,9 +162,29 @@ export default function SingleCollectionProduct() {
 
   return (
     <Layout>
+      {/* ---------------- SEO ---------------- */}
+      <Helmet>
+        <title>{product.name} | {collection.name} Collection | Stuvely</title>
+        <meta
+          name="description"
+          content={
+            product.shortDescription ||
+            `Buy ${product.name} from ${collection.name} collection at Stuvely. Premium quality with best prices and fast delivery.`
+          }
+        />
+        <meta
+          name="keywords"
+          content={`${product.name}, ${collection.name}, ${collection.slug}, Stuvely product`}
+        />
+        <link
+          rel="canonical"
+          href={`https://stuvely.com/collections/${slug}/product/${productId}`}
+        />
+      </Helmet>
+
       {/* PRODUCT */}
       <div className="max-w-6xl mx-auto p-6 grid lg:grid-cols-2 gap-12">
-        {/* IMAGES – ZARA STYLE */}
+        {/* IMAGES */}
         <div className="p-6">
           <img
             src={images[activeImage]}
@@ -193,7 +212,7 @@ export default function SingleCollectionProduct() {
           )}
         </div>
 
-        {/* DETAILS – H&M STYLE */}
+        {/* DETAILS */}
         <div className="space-y-6">
           <h1 className="text-3xl font-semibold tracking-wide">
             {product.name}
@@ -265,7 +284,7 @@ export default function SingleCollectionProduct() {
         </div>
       </div>
 
-      {/* RELATED */}
+      {/* RELATED PRODUCTS */}
       {related.length > 0 && (
         <div className="max-w-6xl mx-auto p-6">
           <h2 className="text-2xl font-semibold mb-6">

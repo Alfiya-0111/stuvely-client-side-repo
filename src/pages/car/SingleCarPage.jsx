@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../../component/Layout";
 import { getAuth } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 
 const CARS_DB_BASE =
   "https://stuvely-data-default-rtdb.firebaseio.com/cars";
@@ -83,6 +84,24 @@ export default function SingleCarPage() {
   /* ================= UI ================= */
   return (
     <Layout>
+      {/* =============== SEO =============== */}
+      <Helmet>
+        <title>{car.name} | Stuvely Cars</title>
+        <meta
+          name="description"
+          content={
+            car.shortDescription
+              ? car.shortDescription
+              : `Buy ${car.name} online at Stuvely. Price: ₹${car.price}. Check key features and specifications.`
+          }
+        />
+        <meta
+          name="keywords"
+          content={`cars, ${car.name}, buy cars online, Stuvely cars, premium cars, ${car.specs?.make || ""}, ${car.specs?.model || ""}`}
+        />
+        <link rel="canonical" href={`https://stuvely.com/cars/${carId}`} />
+      </Helmet>
+
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-16">
         {/* ================= IMAGES ================= */}
         <div className="top-24">

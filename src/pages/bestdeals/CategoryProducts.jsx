@@ -6,6 +6,7 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 const FIREBASE_DB_URL =
   "https://stuvely-data-default-rtdb.firebaseio.com/bestdeals.json";
@@ -41,25 +42,25 @@ export default function CategoryProducts() {
 
       setOfferTitle(data[offerId].title || "");
 
-      const formatted = Object.entries(
-        data[offerId].products || {}
-      ).map(([id, val]) => {
-        const price = Number(val.price || 0);
-        const offer = Number(val.offer || 0);
-        const finalPrice = offer
-          ? Math.round(price - (price * offer) / 100)
-          : price;
+      const formatted = Object.entries(data[offerId].products || {}).map(
+        ([id, val]) => {
+          const price = Number(val.price || 0);
+          const offer = Number(val.offer || 0);
+          const finalPrice = offer
+            ? Math.round(price - (price * offer) / 100)
+            : price;
 
-        return {
-          id,
-          ...val,
-          finalPrice,
-          image:
-            val.imageUrl ||
-            val.image ||
-            "https://via.placeholder.com/600x800?text=No+Image",
-        };
-      });
+          return {
+            id,
+            ...val,
+            finalPrice,
+            image:
+              val.imageUrl ||
+              val.image ||
+              "https://via.placeholder.com/600x800?text=No+Image",
+          };
+        }
+      );
 
       setProducts(formatted);
 
@@ -68,9 +69,7 @@ export default function CategoryProducts() {
         const rRef = ref(db, `reviews/${p.id}`);
         onValue(rRef, (snap) => {
           const rev = snap.val() || {};
-          const ratings = Object.values(rev).map((r) =>
-            Number(r.rating || 0)
-          );
+          const ratings = Object.values(rev).map((r) => Number(r.rating || 0));
 
           const avg =
             ratings.length > 0
@@ -96,14 +95,12 @@ export default function CategoryProducts() {
       return;
     }
 
-    // already added → sirf alert
     if (wishlist[p.id]) {
       toast("Already in wishlist 🤍", { icon: "⚠️" });
       return;
     }
 
     const wRef = ref(db, `wishlist/${user.uid}/${p.id}`);
-
     await set(wRef, {
       id: p.id,
       name: p.name,
@@ -112,7 +109,6 @@ export default function CategoryProducts() {
       finalPrice: p.finalPrice,
     });
 
-    // 🔥 INSTANT UI UPDATE (heart black)
     setWishlist((prev) => ({
       ...prev,
       [p.id]: true,
@@ -134,6 +130,23 @@ export default function CategoryProducts() {
 
   return (
     <Layout>
+      {/* ---------------- SEO ---------------- */}
+      <Helmet>
+        <title>{offerTitle || "Best Deals"} | Stuvely</title>
+        <meta
+          name="description"
+          content={`Check out the latest ${offerTitle} products on Stuvely. Limited-time offers, exclusive deals, and modern essentials.`}
+        />
+        <meta
+          name="keywords"
+          content={`Stuvely, ${offerTitle}, best deals, offers, limited time, modern essentials`}
+        />
+        <link
+          rel="canonical"
+          href={`https://stuvely.com/bestdeals/${offerId}`}
+        />
+      </Helmet>
+
       {/* 🔥 Toast Container */}
       <Toaster position="top-center" />
 
@@ -149,9 +162,7 @@ export default function CategoryProducts() {
             <div
               key={p.id}
               className="group cursor-pointer"
-              onClick={() =>
-                navigate(`/bestdeals/${offerId}/product/${p.id}`)
-              }
+              onClick={() => navigate(`/bestdeals/${offerId}/product/${p.id}`)}
             >
               {/* IMAGE */}
               <div className="relative overflow-hidden bg-gray-100">
@@ -170,15 +181,9 @@ export default function CategoryProducts() {
                   className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow hover:scale-110 transition"
                 >
                   {wishlist[p.id] ? (
-                    <AiFillHeart
-                      size={20}
-                      className="text-black transition"
-                    />
+                    <AiFillHeart size={20} className="text-black transition" />
                   ) : (
-                    <AiOutlineHeart
-                      size={20}
-                      className="text-gray-500 transition"
-                    />
+                    <AiOutlineHeart size={20} className="text-gray-500 transition" />
                   )}
                 </button>
               </div>
@@ -195,9 +200,7 @@ export default function CategoryProducts() {
                     <span className="line-through text-gray-400 mr-2">
                       ₹{p.price}
                     </span>
-                    <span className="price-hm">
-                      ₹{p.finalPrice}
-                    </span>
+                    <span className="price-hm">₹{p.finalPrice}</span>
                   </div>
                 ) : (
                   <div className="price-hm">₹{p.price}</div>
