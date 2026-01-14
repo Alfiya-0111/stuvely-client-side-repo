@@ -242,28 +242,48 @@ function Nav() {
         {/* RIGHT DESKTOP */}
         <div className="flex items-center gap-6 text-sm font-medium">
           {/* ACCOUNT */}
-          <div className="relative group">
-            <button className="hover:text-indigo-600">
-              {currentUser
-                ? currentUser.displayName || currentUser.email.split("@")[0]
-                : "Account"}
-            </button>
-            <ul className="absolute right-0 top-full hidden group-hover:block bg-white shadow-xl rounded-xl w-52 p-2 mt-2">
-              {currentUser ? (
-                <>
-                  <Link to="/profile" className="block px-3 py-2 hover:bg-gray-100">My Profile</Link>
-                  <Link to="/orders" className="block px-3 py-2 hover:bg-gray-100">Orders</Link>
-                  <Link to="/wishlist" className="block px-3 py-2 hover:bg-gray-100">Wishlist</Link>
-                  <button onClick={handleLogout} className="block w-full text-left px-3 py-2 text-red-500 hover:bg-gray-100">Logout</button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="block px-3 py-2 hover:bg-gray-100">Login</Link>
-                  <Link to="/signup" className="block px-3 py-2 hover:bg-gray-100">Sign Up</Link>
-                </>
-              )}
-            </ul>
-          </div>
+      <div className="relative group">
+  <button className="hover:text-indigo-600 px-2 py-1">
+    {currentUser
+      ? currentUser.displayName || currentUser.email.split("@")[0]
+      : "Account"}
+  </button>
+
+  <ul
+    className="absolute right-0 top-full hidden group-hover:block 
+               bg-white shadow-xl rounded-xl w-52 p-2 mt-0"
+  >
+    {currentUser ? (
+      <>
+        <Link to="/profile" className="block px-3 py-2 hover:bg-gray-100 rounded-lg">
+          My Profile
+        </Link>
+        <Link to="/orders" className="block px-3 py-2 hover:bg-gray-100 rounded-lg">
+          Orders
+        </Link>
+        <Link to="/wishlist" className="block px-3 py-2 hover:bg-gray-100 rounded-lg">
+          Wishlist
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="block w-full text-left px-3 py-2 text-red-500 hover:bg-gray-100 rounded-lg"
+        >
+          Logout
+        </button>
+      </>
+    ) : (
+      <>
+        <Link to="/login" className="block px-3 py-2 hover:bg-gray-100 rounded-lg">
+          Login
+        </Link>
+        <Link to="/signup" className="block px-3 py-2 hover:bg-gray-100 rounded-lg">
+          Sign Up
+        </Link>
+      </>
+    )}
+  </ul>
+</div>
+
 
           {/* CART */}
           <div onClick={() => navigate("/cart")} className="relative cursor-pointer">
