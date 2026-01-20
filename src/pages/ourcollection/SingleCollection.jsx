@@ -126,7 +126,7 @@ function SingleCollection() {
           <img
             src={collection.imageUrl}
             alt={collection.name}
-            className="w-full h-[220px] sm:h-[320px] lg:h-[420px] object-cover hover:scale-[1.03] transition duration-500"
+            className="w-auto h-[220px] sm:h-[320px] lg:h-[320px] object-cover hover:scale-[1.03] transition duration-500"
           />
         </div>
 
@@ -157,11 +157,12 @@ function SingleCollection() {
                   <Link to={`/collections/${slug}/product/${id}`}>
                     {/* Image */}
                     <div className="overflow-hidden bg-gray-100">
-                      <img
-                        src={prod.imageUrl}
-                        alt={prod.name}
-                        className="w-full h-[170px] sm:h-[220px] object-cover transition-transform duration-500 group-hover:translate-y-[-6px]"
-                      />
+                    <img
+  src={prod.image || prod.imageUrl}
+  alt={prod.name}
+  className="w-full h-[170px] sm:h-[220px] object-cover"
+ />
+
                     </div>
 
                     {/* Info */}
