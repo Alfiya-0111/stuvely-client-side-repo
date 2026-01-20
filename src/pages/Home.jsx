@@ -120,15 +120,15 @@ function Home() {
   }, []);
 
   /* 🔹 LUXURY LOGO LOADER */
-  if (isLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-white">
-        <h1 className="text-2xl md:text-3xl tracking-[0.45em] font-light luxury-glow">
-          STUVELY
-        </h1>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="h-screen flex items-center justify-center bg-white">
+  //       <h1 className="text-2xl md:text-3xl tracking-[0.45em] font-light luxury-glow">
+  //         STUVELY
+  //       </h1>
+  //     </div>
+  //   );
+  // }
 
   /* 🔹 MAIN CONTENT */
   return (
