@@ -76,7 +76,7 @@ export default function KeychainsProductInfo() {
     return (
       <Layout>
         <div className="py-20 text-center text-gray-400">
-          Loading keychain...
+          Loading Top Deals Products
         </div>
       </Layout>
     );
@@ -86,21 +86,47 @@ export default function KeychainsProductInfo() {
   return (
     <Layout>
       {/* ===== SEO ===== */}
-      <Helmet>
-        <title>{product.name} | Stuvely</title>
-        <meta
-          name="description"
-          content={product.description || `Buy ${product.name} online at best price. Keychains available at Stuvely.`}
-        />
-        <meta
-          name="keywords"
-          content={`${product.name}, keychains, buy keychains online, Stuvely keychains, gift keychains`}
-        />
-        <link
-          rel="canonical"
-          href={`https://stuvely.com/keychains/${carId}`}
-        />
-      </Helmet>
+   <Helmet>
+  {/* -------- BASIC SEO -------- */}
+  <title>
+    {product.name} | Buy Online in {product.category || "Top Deals"} at Best Price | Stuvely
+  </title>
+
+  <meta
+    name="description"
+    content={
+      product.description
+        ? product.description
+        : `Buy ${product.name} online from Stuvely. Best deals in ${product.category || "Top Deals"}. Fast delivery and secure shopping.`
+    }
+  />
+
+  <meta
+    name="keywords"
+    content={`${product.name}, ${product.category || "Top Deals"}, buy online, best price, ecommerce store, Stuvely`}
+  />
+
+  <link
+    rel="canonical"
+    href={`https://stuvely.com/${(product.category || "top-deals")
+      .toLowerCase()
+      .replace(/\s+/g, "-")}/${carId}`}
+  />
+
+  {/* -------- OPEN GRAPH (Social Sharing) -------- */}
+  <meta property="og:title" content={product.name} />
+  <meta
+    property="og:description"
+    content={
+      product.description ||
+      `Buy ${product.name} online at best price from Stuvely`
+    }
+  />
+  <meta property="og:image" content={product.gallery?.[0]} />
+  <meta property="og:type" content="product" />
+</Helmet>
+
+
 
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-16">
         {/* ================= IMAGES ================= */}

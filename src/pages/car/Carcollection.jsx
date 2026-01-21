@@ -45,18 +45,37 @@ export default function Carcollection() {
   return (
     <section className="bg-white py-20">
       {/* ---------------- SEO ---------------- */}
-      <Helmet>
-        <title>New Car Arrivals | Stuvely</title>
-        <meta
-          name="description"
-          content="Explore the latest car arrivals at Stuvely. Premium collection of cars with best prices and offers. Check out our new arrivals now!"
-        />
-        <meta
-          name="keywords"
-          content="cars, new arrivals, Stuvely cars, buy cars online, premium cars, car collection"
-        />
-        <link rel="canonical" href={`https://stuvely.com/cars`} />
-      </Helmet>
+   <Helmet>
+  {/* -------- BASIC SEO -------- */}
+  <title>New Arrivals | Latest Products & Top Deals Online | Stuvely</title>
+
+  <meta
+    name="description"
+    content="Discover new arrivals on Stuvely. Shop the latest trending products across fashion, accessories, lifestyle, gadgets, and more at best prices."
+  />
+
+  <meta
+    name="keywords"
+    content="new arrivals, latest products, trending items, top deals, online shopping, ecommerce store, Stuvely"
+  />
+
+  <link rel="canonical" href="https://stuvely.com/new-arrivals" />
+
+  {/* -------- OPEN GRAPH -------- */}
+  <meta
+    property="og:title"
+    content="New Arrivals | Shop Latest Products Online at Stuvely"
+  />
+  <meta
+    property="og:description"
+    content="Shop new arrivals on Stuvely. Explore trending products across multiple categories with best deals and fast delivery."
+  />
+  <meta
+    property="og:image"
+    content={cars?.[0]?.image || "https://stuvely.com/og-image.jpg"}
+  />
+  <meta property="og:type" content="website" />
+</Helmet>
 
       <div className="max-w-7xl mx-auto px-6">
         {/* ================= HEADING ================= */}
@@ -86,7 +105,7 @@ export default function Carcollection() {
                 )}
               </button>
 
-              <Link to={`/cars/${car.id}`}>
+<Link to={`/new-arrivals/${car.id}`}>
                 {/* IMAGE */}
                 <div className="relative h-44 flex items-center justify-center overflow-visible">
                   <img

@@ -8,7 +8,8 @@ const CARS_DB_BASE =
   "https://stuvely-data-default-rtdb.firebaseio.com/cars";
 
 export default function SingleCarPage() {
-  const { carId } = useParams();
+  const { productId } = useParams(); // <-- correct
+
   const [car, setCar] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
   const [adding, setAdding] = useState(false);
@@ -17,7 +18,7 @@ export default function SingleCarPage() {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await fetch(`${CARS_DB_BASE}/${carId}.json`);
+        const res = await fetch(`${CARS_DB_BASE}/${productId}.json`);
         const data = await res.json();
         if (!data) return;
 
@@ -37,7 +38,7 @@ export default function SingleCarPage() {
     };
 
     fetchCar();
-  }, [carId]);
+  }, [productId]);
 
   const getUser = () => getAuth().currentUser;
 
@@ -49,12 +50,12 @@ export default function SingleCarPage() {
     setAdding(true);
 
     const cartItem = {
-      carId,
+      carId: productId,
       name: car.name,
       image: car.gallery[activeImage],
       price: Number(car.price) || 0,
       quantity: 1,
-      category: "cars",
+      category: "new-arrivals",
       addedAt: new Date().toISOString(),
     };
 
@@ -86,7 +87,7 @@ export default function SingleCarPage() {
     <Layout>
       {/* =============== SEO =============== */}
       <Helmet>
-        <title>{car.name} | Stuvely Cars</title>
+        <title>{car.name} | New Arrivals | Stuvely</title>
         <meta
           name="description"
           content={
@@ -97,19 +98,20 @@ export default function SingleCarPage() {
         />
         <meta
           name="keywords"
-          content={`cars, ${car.name}, buy cars online, Stuvely cars, premium cars, ${car.specs?.make || ""}, ${car.specs?.model || ""}`}
+          content={`new arrivals, ${car.name}, buy online, Stuvely, ${car.specs?.make || ""}, ${car.specs?.model || ""}`}
         />
-        <link rel="canonical" href={`https://stuvely.com/cars/${carId}`} />
+        <link rel="canonical" href={`https://stuvely.com/new-arrivals/${productId}`} />
       </Helmet>
 
+      {/* =============== PRODUCT UI =============== */}
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-16">
-        {/* ================= IMAGES ================= */}
+        {/* IMAGES */}
         <div className="top-24">
-          <div className=" flex items-center justify-center overflow-hidden">
+          <div className="flex items-center justify-center overflow-hidden">
             <img
               src={car.gallery[activeImage]}
               alt={car.name}
-              className="w-auto h-[340px]  transition-transform duration-500 hover:scale-105"
+              className="w-auto h-[340px] transition-transform duration-500 hover:scale-105"
             />
           </div>
 
@@ -120,7 +122,7 @@ export default function SingleCarPage() {
                 key={i}
                 src={img}
                 onClick={() => setActiveImage(i)}
-                className={`w-20 h-20  rounded cursor-pointer border transition ${
+                className={`w-20 h-20 rounded cursor-pointer border transition ${
                   activeImage === i
                     ? "border-black"
                     : "border-transparent hover:border-gray-400"
@@ -130,7 +132,7 @@ export default function SingleCarPage() {
           </div>
         </div>
 
-        {/* ================= DETAILS ================= */}
+        {/* DETAILS */}
         <div className="space-y-6">
           <h1 className="text-3xl font-semibold tracking-wide">
             {car.name}
@@ -149,7 +151,6 @@ export default function SingleCarPage() {
             </span>
           </div>
 
-          {/* CTA */}
           <button
             onClick={addToCart}
             disabled={adding}
@@ -226,7 +227,7 @@ export default function SingleCarPage() {
         </div>
       </div>
 
-      {/* ================= MOBILE STICKY BAR ================= */}
+      {/* MOBILE STICKY BAR */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-between items-center z-50">
         <div>
           <div className="text-sm text-gray-500">Price</div>

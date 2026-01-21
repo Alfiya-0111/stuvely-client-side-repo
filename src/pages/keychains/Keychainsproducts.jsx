@@ -8,21 +8,33 @@ import { Helmet } from "react-helmet-async";
 export default function Keychainsproducts() {
   const [keychains, setKeychains] = useState([]);
   const [wishlist, setWishlist] = useState({});
+  const [seoCategory, setSeoCategory] = useState("Top Deals");
 
   // Fetch products
-  useEffect(() => {
-    fetch("https://stuvely-data-default-rtdb.firebaseio.com/keychains.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data) {
-          const arr = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setKeychains(arr);
+useEffect(() => {
+  fetch("https://stuvely-data-default-rtdb.firebaseio.com/keychains.json")
+    .then((res) => res.json())
+    .then((data) => {
+      if (data) {
+        const arr = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setKeychains(arr);
+
+        // 🔥 DYNAMIC CATEGORY DETECTION
+        const categories = [
+          ...new Set(arr.map((p) => p.category).filter(Boolean)),
+        ];
+
+        if (categories.length === 1) {
+          setSeoCategory(categories[0]);
+        } else if (categories.length > 1) {
+          setSeoCategory("Multiple Categories");
         }
-      });
-  }, []);
+      }
+    });
+}, []);
 
   // Fetch wishlist
   useEffect(() => {
@@ -49,17 +61,23 @@ export default function Keychainsproducts() {
     <div className="max-w-7xl mx-auto px-6 py-10">
       {/* ========== SEO ========== */}
       <Helmet>
-        <title>Top Keychains | Stuvely</title>
-        <meta
-          name="description"
-          content="Explore the latest keychains collection at Stuvely. Unique, trendy, and affordable keychains to add style to your everyday life."
-        />
-        <meta
-          name="keywords"
-          content="keychains, buy keychains online, Stuvely keychains, trendy keychains, gift keychains"
-        />
-        <link rel="canonical" href={`https://stuvely.com/keychains`} />
-      </Helmet>
+  <title>
+    Top Deals on {seoCategory} | Online Shopping at Stuvely
+  </title>
+
+  <meta
+    name="description"
+    content={`Shop top deals on ${seoCategory.toLowerCase()} at Stuvely. Discover trending products, exclusive offers, and best prices across categories.`}
+  />
+
+  <meta
+    name="keywords"
+    content={`${seoCategory}, top deals, buy online, best offers, ecommerce store, Stuvely`}
+  />
+
+  <link rel="canonical" href="https://stuvely.com/keychains" />
+</Helmet>
+
 
       {/* HEADING */}
       <h2 className="heading-zara text-hm-xl text-black mb-8">

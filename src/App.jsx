@@ -42,7 +42,7 @@ function App() {
         {/* Collections */}
         <Route path="/collections" element={<Ourcollection />} />
         <Route path="/collections/:slug" element={<SingleCollection />} />
-     <Route path="/collections/:slug/product/:productId" element={<SingleProduct />} />
+        <Route path="/collections/:slug/product/:productId" element={<SingleProduct />} />
 
         {/* Cart */}
         <Route path='/cart' element={<Cart />} />
@@ -56,23 +56,26 @@ function App() {
         <Route path='/bestdeals' element={<CategoriesClient />} />
         <Route path='/bestdeals/:offerId' element={<CategoryProducts />} />
         <Route path='/bestdeals/:offerId/product/:productId' element={<SingleProducts />} />
-        {/* Cars */}
-        <Route path='/cars' element={<Carcollection />} />
-        <Route path='/cars/:carId' element={<SingleCarPage />} />
+
+        {/* New Arrivals (Cars) */}
+        <Route path='/new-arrivals' element={<Carcollection />} />
+        <Route path='/new-arrivals/:productId' element={<SingleCarPage />} />
+
         {/* Keychains */}
         <Route path='/keychains' element={<Keychainsproducts />} />
         <Route path='/keychains/:carId' element={<Keychainsproductinfo />} />
+
         <Route path='/checkout' element={<Checkout/>}/>
-        {/* Dynamic Pages (Admin controlled content) */}
+
+        {/* Dynamic Pages */}
         <Route path='/page/:slug' element={<DynamicPage />} />
         <Route path='orders' element={<Orders/>}/>
         <Route path="profile" element={<MyProfile/>}/>
         <Route path='wishlist' element={<Wishlist/>}/>
+
         {/* Catch-all */}
         <Route path='*' element={<div className="text-center mt-20">404 - Page not found</div>} />
       </Routes>
-
-    
     </BrowserRouter>
   );
 }
