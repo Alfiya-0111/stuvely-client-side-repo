@@ -146,6 +146,15 @@ const handlePasswordReset = async () => {
         >
           CONTINUE WITH GOOGLE
         </button>
+        <p className="text-xs text-center mt-6">
+  Don’t have an account?{" "}
+  <span
+    onClick={() => navigate("/signup")}
+    className="cursor-pointer text-black underline hover:text-gray-700"
+  >
+    Create Account
+  </span>
+</p>
       </div>
 
       <ToastContainer position="top-right" autoClose={3000} />

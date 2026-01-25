@@ -117,16 +117,30 @@ function Signup() {
         </div>
 
         {/* GOOGLE SIGNUP */}
-        <button
-          onClick={handleGoogleSignup}
-          className="w-full border border-black py-3 text-sm tracking-widest hover:bg-black hover:text-white transition"
-        >
-          CONTINUE WITH GOOGLE
-        </button>
+       {/* GOOGLE SIGNUP */}
+<button
+  onClick={handleGoogleSignup}
+  className="w-full border border-black py-3 text-sm tracking-widest hover:bg-black hover:text-white transition"
+>
+  CONTINUE WITH GOOGLE
+</button>
 
-        <p className="text-xs text-gray-400 text-center mt-6 leading-relaxed">
-          By creating an account, you agree to our Terms & Conditions and Privacy Policy.
-        </p>
+{/* ALREADY HAVE ACCOUNT */}
+<p className="text-xs text-center mt-6">
+  Already have an account?{" "}
+  <span
+    onClick={() => navigate("/login")}
+    className="cursor-pointer text-black underline hover:text-gray-700"
+  >
+    Login
+  </span>
+</p>
+
+<p className="text-xs text-gray-400 text-center mt-4 leading-relaxed">
+  By creating an account, you agree to our Terms & Conditions and Privacy Policy.
+</p>
+
+       
       </div>
 
       <ToastContainer position="top-right" autoClose={3000} />

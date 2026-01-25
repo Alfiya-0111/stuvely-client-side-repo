@@ -232,7 +232,7 @@ export default function SingleCollectionProduct() {
             <button
               onClick={addToCart}
               disabled={adding}
-              className="flex-1 py-4 bg-black text-white uppercase tracking-wider text-sm hover:bg-gray-900 transition"
+              className="flex-1 py-4 border border-black text-black uppercase tracking-wider text-sm hover:bg-gray-900 hover:text-white transition"
             >
               {adding ? "Adding..." : "Add to Bag"}
             </button>

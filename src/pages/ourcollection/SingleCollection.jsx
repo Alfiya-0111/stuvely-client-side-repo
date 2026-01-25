@@ -118,17 +118,17 @@ function SingleCollection() {
           <h1 className="heading-zara text-xl sm:text-2xl">
             {collection.name}
           </h1>
-          <div className="w-12 h-[1px] bg-black mt-3"></div>
+         
         </div>
 
         {/* ================= Banner ================= */}
-        <div className="mb-14 overflow-hidden rounded-lg">
+        {/* <div className="mb-14 overflow-hidden rounded-lg">
           <img
             src={collection.imageUrl}
             alt={collection.name}
             className="w-auto h-[220px] sm:h-[320px] lg:h-[320px] object-cover hover:scale-[1.03] transition duration-500"
           />
-        </div>
+        </div> */}
 
         {/* ================= Products Grid ================= */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
