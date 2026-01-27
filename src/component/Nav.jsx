@@ -74,7 +74,7 @@ function Nav() {
         setSuggestions([]);
       }
     };
-    document.addEventListener("mousedown", handler);
+document.addEventListener("click", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
@@ -217,9 +217,9 @@ const handleChange = (e) => {
       return (
         <li
           key={i}
-          onClick={() => p.id && handleClickSuggestion(p)}
-          className={`flex items-center gap-3 px-4 py-2 ${
-            p.id ? "hover:bg-gray-100 cursor-pointer" : "text-gray-400"
+onMouseDown={() => p.id && handleClickSuggestion(p)}
+className={`flex items-center gap-3 px-4 py-2 ${
+p.id ? "hover:bg-gray-100 cursor-pointer" : "text-gray-400"
           }`}
         >
           {img && (
