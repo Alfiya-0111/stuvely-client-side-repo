@@ -104,22 +104,24 @@ function Nav() {
     navigate("/login");
   };
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
+const handleChange = (e) => {
+  const value = e.target.value;
+  setSearchTerm(value);
 
-    if (value.trim()) {
-      const filtered = combinedProducts.filter(
-        (p) =>
-          p.name?.toLowerCase().includes(value.toLowerCase()) ||
-          p.category?.toLowerCase().includes(value.toLowerCase())
-      );
+  if (value.trim()) {
+    const filtered = combinedProducts.filter((p) =>
+      p.name?.toLowerCase().includes(value.toLowerCase())
+    );
 
-      setSuggestions(
-        filtered.length ? filtered.slice(0, 8) : [{ id: null, name: "No result found" }]
-      );
-    } else setSuggestions([]);
-  };
+    setSuggestions(
+      filtered.length
+        ? filtered.slice(0, 8)
+        : [{ id: null, name: "No result found" }]
+    );
+  } else {
+    setSuggestions([]);
+  }
+};
 
   const handleClickSuggestion = (item) => {
     if (!item.id) return;
@@ -132,10 +134,8 @@ function Nav() {
         navigate(`/product/${item.sliderSlug}/${item.id}`);
         break;
       case "product":
-        item.collectionSlug
-          ? navigate(`/collections/${item.collectionSlug}/${item.id}`)
-          : navigate("/collections");
-        break;
+  navigate(`/collections/${item.collectionSlug}/product/${item.id}`);
+  break;
       case "collection":
         navigate(`/collections/${item.slug}`);
         break;
@@ -209,34 +209,34 @@ function Nav() {
             </button>
           </form>
 
-          {suggestions.length > 0 && (
-            <ul className="absolute w-full bg-white shadow-xl rounded-xl mt-2 z-50 max-h-96 overflow-y-auto">
-              {suggestions.map((p, i) => {
-                const img = p.image || p.productImage || (p.gallery && p.gallery[0]);
-                return (
-                  <li
-                    key={i}
-                    onClick={() => p.id && handleClickSuggestion(p)}
-                    className={`flex items-center gap-3 px-4 py-2 ${
-                      p.id ? "hover:bg-gray-100 cursor-pointer" : "text-gray-400"
-                    }`}
-                  >
-                    {img && (
-                      <img
-                        src={typeof img === "string" ? img : img?.url}
-                        className="w-10 h-10 object-cover rounded"
-                        alt={p.name}
-                      />
-                    )}
-                    <div>
-                      <p className="text-sm font-medium">{p.name}</p>
-                      {p.category && <p className="text-xs text-gray-500">{p.category}</p>}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+       {suggestions.length > 0 && (
+  <ul className="absolute w-full bg-white shadow-xl rounded-xl mt-2 z-50 max-h-96 overflow-y-auto">
+    {suggestions.map((p, i) => {
+      const img = p.image || p.productImage || (p.gallery && p.gallery[0]);
+      return (
+        <li
+          key={i}
+          onClick={() => p.id && handleClickSuggestion(p)}
+          className={`flex items-center gap-3 px-4 py-2 ${
+            p.id ? "hover:bg-gray-100 cursor-pointer" : "text-gray-400"
+          }`}
+        >
+          {img && (
+            <img
+              src={typeof img === "string" ? img : img?.url}
+              className="w-12 h-12 object-cover rounded"
+              alt={p.name}
+            />
           )}
+
+          <p className="text-sm font-medium line-clamp-2">
+            {p.name}
+          </p>
+        </li>
+      );
+    })}
+  </ul>
+)}
         </div>
 
         {/* RIGHT DESKTOP */}

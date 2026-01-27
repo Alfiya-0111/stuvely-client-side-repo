@@ -13,11 +13,6 @@ function Home() {
   const [keychains, setKeychains] = useState([]);
   const [cars, setCars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Search state
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-
   /* 🔹 Fetch all products */
   useEffect(() => {
     const fetchAll = async () => {
@@ -135,21 +130,7 @@ function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  /* 🔹 SEARCH FUNCTION */
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setSearchResults([]);
-      return;
-    }
 
-    const query = searchQuery.toLowerCase();
-    const results = allProducts.filter((p) =>
-      p.name.toLowerCase().includes(query) ||
-      p.category.toLowerCase().includes(query)
-    );
-
-    setSearchResults(results);
-  }, [searchQuery, allProducts]);
 
   /* 🔹 MAIN CONTENT */
   return (
@@ -187,43 +168,8 @@ function Home() {
         </script>
       </Helmet>
 
-      {/* SEARCH BAR */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex items-center gap-3 border rounded-lg px-4 py-3">
-          <input
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full outline-none"
-            placeholder="Search for products, brands, categories..."
-          />
-          <button
-            className="bg-black text-white px-5 py-2 rounded-lg"
-            onClick={() => setSearchQuery(searchQuery)}
-          >
-            Search
-          </button>
-        </div>
-
-        {/* SEARCH RESULTS */}
-        {searchResults.length > 0 && (
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-3">Search Results</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {searchResults.slice(0, 12).map((p) => (
-                <Link
-                  key={p.id}
-                  to={p.route}
-                  className="border rounded-lg p-3 hover:shadow-lg transition"
-                >
-                  <img src={p.image} alt={p.name} className="h-28 w-full object-cover" />
-                  <h3 className="mt-2 text-sm font-medium">{p.name}</h3>
-                  <p className="text-xs text-gray-500">{p.category}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+     
+    
 
       {/* DEFAULT HOME SECTIONS */}
       <OfferSlider />
