@@ -210,6 +210,7 @@ const handleChange = (e) => {
           </form>
 
        {suggestions.length > 0 && (
+        <div className="relative w-full">
   <ul className="absolute w-full bg-white shadow-xl rounded-xl mt-2 z-50 max-h-96 overflow-y-auto">
     {suggestions.map((p, i) => {
       const img = p.image || p.productImage || (p.gallery && p.gallery[0]);
@@ -236,6 +237,7 @@ const handleChange = (e) => {
       );
     })}
   </ul>
+  </div>
 )}
         </div>
 
@@ -344,7 +346,7 @@ const handleChange = (e) => {
 
 
 {/* SEARCH BAR BELOW NAVBAR */}
-<div className="md:hidden bg-white px-4 py-3 border-b shadow-sm">
+<div className="md:hidden bg-white px-4 py-3  shadow-sm">
   <form onSubmit={handleSearch} className="flex items-center bg-gray-100 rounded-full px-3 py-2">
     <IoSearchOutline className="text-gray-500 text-xl" />
     <input
@@ -357,6 +359,36 @@ const handleChange = (e) => {
       <BsFillMicFill />
     </button>
   </form>
+      {suggestions.length > 0 && (
+        <div className="relative w-full">
+  <ul className="absolute w-full bg-white shadow-xl rounded-xl mt-2 z-50 max-h-96 overflow-y-auto">
+    {suggestions.map((p, i) => {
+      const img = p.image || p.productImage || (p.gallery && p.gallery[0]);
+      return (
+        <li
+          key={i}
+          onClick={() => p.id && handleClickSuggestion(p)}
+          className={`flex items-center gap-3 px-4 py-2 ${
+            p.id ? "hover:bg-gray-100 cursor-pointer" : "text-gray-400"
+          }`}
+        >
+          {img && (
+            <img
+              src={typeof img === "string" ? img : img?.url}
+              className="w-12 h-12 object-cover rounded"
+              alt={p.name}
+            />
+          )}
+
+          <p className="text-sm font-medium line-clamp-2">
+            {p.name}
+          </p>
+        </li>
+      );
+    })}
+  </ul>
+  </div>
+)}
 </div>
 
 {/* MENU DROPDOWN LINKS */}

@@ -16,7 +16,15 @@ export default function useAllProducts() {
 
         Object.keys(data).forEach((colKey) => {
           const col = data[colKey];
-
+const getProductImage = (prod) => {
+  return typeof prod.imageUrl === "string"
+    ? prod.imageUrl
+    : prod.imageUrl?.url ||
+        prod.image ||
+        prod.images?.[0] ||
+        prod.gallery?.[0] ||
+        "";
+};
           // Collection
           arr.push({
             id: colKey,
@@ -28,22 +36,26 @@ export default function useAllProducts() {
           });
 
           // Products
-          if (col.products) {
-            Object.keys(col.products).forEach((prodKey) => {
-              const prod = col.products[prodKey];
-              arr.push({
-                id: prodKey,
-                name: prod.name,
-                type: "product",
-                collectionSlug:
-                  col.slug || col.name.toLowerCase().replace(/\s+/g, "-"),
-                image: prod.imageUrl,
-                category: prod.category || col.category || "Product",
-                price: prod.price,
-                offer: prod.offer,
-              });
-            });
-          }
+        // Products
+if (col.products) {
+  Object.keys(col.products).forEach((prodKey) => {
+    const prod = col.products[prodKey];
+
+    arr.push({
+      id: prodKey,
+      name: prod.name,
+      type: "product",
+      collectionSlug:
+        col.slug || col.name.toLowerCase().replace(/\s+/g, "-"),
+
+      image: getProductImage(prod), // ✅ yahin lagao
+
+      category: prod.category || col.category || "Product",
+      price: prod.price,
+      offer: prod.offer,
+    });
+  });
+}
         });
 
         setAllProducts(arr);
