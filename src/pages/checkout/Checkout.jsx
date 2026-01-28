@@ -149,7 +149,7 @@ export default function Checkout() {
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-24 h-32 object-contain "
+                  className="w-24 h-32  "
                 />
                 <div className="flex-1">
                   <h3 className="font-medium">{item.name}</h3>

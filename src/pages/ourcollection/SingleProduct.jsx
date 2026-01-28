@@ -149,6 +149,30 @@ export default function SingleCollectionProduct() {
     }
     setAdding(false);
   };
+  /* ---------------- BUY NOW (DIRECT CHECKOUT) ---------------- */
+const buyNow = () => {
+  const user = auth.currentUser;
+  if (!user) return navigate("/login");
+
+  const currentPrice = priceAfterOffer(product);
+
+  const buyNowItem = {
+    productId,
+    name: product.name,
+    image: getImages(product)[activeImage],
+    price: product.price,
+    currentPrice,
+    quantity: 1,
+    category: "collections",
+  };
+
+  navigate("/checkout", {
+    state: {
+      cartItems: [buyNowItem],
+      total: currentPrice,
+    },
+  });
+};
 
   if (!product || !collection) {
     return (
@@ -228,26 +252,33 @@ export default function SingleCollectionProduct() {
             ₹{priceAfterOffer(product)}
           </div>
 
-          <div className="flex gap-4">
-            <button
-              onClick={addToCart}
-              disabled={adding}
-              className="flex-1 py-4 border border-black text-black uppercase tracking-wider text-sm hover:bg-gray-900 hover:text-white transition"
-            >
-              {adding ? "Adding..." : "Add to Bag"}
-            </button>
+         <div className="flex gap-4">
+  <button
+    onClick={addToCart}
+    disabled={adding}
+    className="flex-1 py-4 border border-black text-black uppercase tracking-wider text-sm hover:bg-gray-900 hover:text-white transition"
+  >
+    {adding ? "Adding..." : "Add to Bag"}
+  </button>
 
-            <button
-              onClick={() => toggleWishlist(product, productId)}
-              className="w-14 flex items-center justify-center border hover:bg-gray-100"
-            >
-              {wishlist[productId] ? (
-                <AiFillHeart size={22} />
-              ) : (
-                <AiOutlineHeart size={22} />
-              )}
-            </button>
-          </div>
+  <button
+    onClick={buyNow}
+    className="flex-1 py-4 b border border-black text-black uppercase tracking-wider text-sm hover:bg-gray-900  hover:text-white transition"
+  >
+    Buy Now
+  </button>
+
+  <button
+    onClick={() => toggleWishlist(product, productId)}
+    className="w-14 flex items-center justify-center border hover:bg-gray-100"
+  >
+    {wishlist[productId] ? (
+      <AiFillHeart size={22} />
+    ) : (
+      <AiOutlineHeart size={22} />
+    )}
+  </button>
+</div>
 
           {/* DESCRIPTION */}
           {product.description && (

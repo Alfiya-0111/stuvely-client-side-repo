@@ -1,12 +1,15 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async"; // ✅ Add Helmet
+import { Helmet } from "react-helmet-async"; 
 import Layout from "../../component/Layout";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, set, remove, onValue } from "firebase/database";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 function OfferSingleProduct() {
+  const navigate = useNavigate();
   const { sliderSlug, productId } = useParams();
   const [offer, setOffer] = useState(null);
   const [product, setProduct] = useState(null);
@@ -95,7 +98,35 @@ function OfferSingleProduct() {
 
     alert("Added to cart");
   };
+const buyNow = () => {
+  const user = auth.currentUser;
+  if (!user) return alert("Please login");
 
+  const currentPrice = product.offer
+    ? product.price - (product.price * product.offer) / 100
+    : product.price;
+
+  const buyNowItem = {
+    productId,
+    sliderId: offer.id,
+    name: product.name,
+    image:
+      activeVariant?.image ||
+      product.gallery?.[activeGalleryIndex]?.url ||
+      product.imageUrl,
+    price: product.price,
+    currentPrice,
+    variant: activeVariant,
+    quantity: 1,
+  };
+
+  navigate("/checkout", {
+    state: {
+      cartItems: [buyNowItem],
+      total: currentPrice,
+    },
+  });
+};
   const toggleWishlist = async () => {
     const user = auth.currentUser;
     if (!user) return;
@@ -232,12 +263,21 @@ function OfferSingleProduct() {
                 </div>
               )}
 
-              <button
-                onClick={addToCart}
-                className="mt-10 px-12 py-3 text-xs uppercase tracking-[0.3em] bg-black text-white hover:bg-gray-900 transition"
-              >
-                Add to Cart
-              </button>
+            <div className="flex gap-4 mt-10">
+  <button
+    onClick={addToCart}
+    className="flex-1 py-3 text-xs uppercase tracking-[0.3em] bg-black text-white hover:bg-gray-900 transition"
+  >
+    Add to Cart
+  </button>
+
+  <button
+    onClick={buyNow}
+    className="flex-1 py-3 text-xs uppercase tracking-[0.3em] border border-black hover:bg-black hover:text-white transition"
+  >
+    Buy Now
+  </button>
+</div>
             </div>
           </div>
         </div>
