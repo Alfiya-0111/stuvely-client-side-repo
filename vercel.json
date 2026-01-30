@@ -5,6 +5,18 @@
       "destination": "https://stuvely-backend-production.up.railway.app/sitemap.xml"
     },
     {
+      "source": "/static/(.*)",
+      "destination": "/static/$1"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/favicon.ico"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
